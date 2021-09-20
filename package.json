@@ -1,0 +1,15 @@
+{
+  "name": "u-cloud",
+  "version": "0.0.0-dev",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "author": "Sergei Orlov <hello@orlow.dev> (https://orlow.dev/)",
+  "license": "MIT",
+  "dependencies": {
+    "ramda": "^0.27.1"
+  }
+}
