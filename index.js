@@ -1,22 +1,21 @@
-const { copyFileSync, statSync } = require('fs');
-const { prop } = require('ramda');
-const { pipe, divideBy } = require('./src/utils');
+const { copyFile, stat } = require("fs");
+const { prop } = require("ramda");
+const { pipe, divideBy, callbackErrorHandler } = require("./src/utils");
 
-const [ sourceFilePath, outputFilePath ] = process.argv.slice(2);
+const [sourceFilePath, outputFilePath] = process.argv.slice(2);
 
-copyFileSync(sourceFilePath, outputFilePath);
+copyFile(sourceFilePath, outputFilePath, callbackErrorHandler);
 
-if (!process.argv.includes('--verbose')) {
-    process.exit(0);
+if (!process.argv.includes("--verbose")) {
+  process.exit(0);
 }
 
-const getFileSize = pipe(
-    statSync,
-    prop('size'),
-    divideBy(1024),
-    Math.round,
-);
+stat(sourceFilePath, (error, stat) => {
+  callbackErrorHandler(error);
 
-console.log(
-    `Copied ${getFileSize(sourceFilePath)}KB from ${sourceFilePath} to ${outputFilePath}`
-);
+  const getFileSize = pipe(prop("size"), divideBy(1024), Math.round);
+
+  console.log(
+    `Copied ${getFileSize(stat)}KB from ${sourceFilePath} to ${outputFilePath}`
+  );
+});
