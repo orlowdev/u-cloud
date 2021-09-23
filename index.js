@@ -1,6 +1,6 @@
 const { createReadStream, createWriteStream, stat } = require("fs");
 const { SingleBar, Presets } = require("cli-progress");
-const { callbackErrorHandler } = require("./src/utils");
+const { createGzip } = require("zlib");
 
 const bar = new SingleBar({}, Presets.shades_classic);
 
@@ -8,6 +8,7 @@ const [sourceFilePath, outputFilePath] = process.argv.slice(2);
 
 const readStream = createReadStream(sourceFilePath);
 const writeStream = createWriteStream(outputFilePath);
+const gzipStream = createGzip();
 
 stat(sourceFilePath, (error, stat) => {
   if (error !== null) {
@@ -17,13 +18,15 @@ stat(sourceFilePath, (error, stat) => {
 
   bar.start(stat.size, 0);
 
-  readStream.on("data", (chunk) => {
-    writeStream.write(chunk);
+  readStream.pipe(
+    gzipStream
+      .on("data", (chunk) => {
+        writeStream.write(chunk);
 
-    bar.increment(chunk.length);
-  });
-
-  readStream.on("close", () => {
-    bar.stop();
-  });
+        bar.increment(chunk.length);
+      })
+      .on("close", () => {
+        bar.stop();
+      })
+  );
 });
