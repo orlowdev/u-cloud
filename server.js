@@ -1,15 +1,15 @@
-const { createServer } = require("http");
-const { Router } = require("./src/router");
-const { uploadFile } = require("./src/routes/upload-file");
-const { getFile } = require("./src/routes/get-file");
-const { defaultHandler } = require("./src/routes/default-handler");
+const { createServer } = require("http")
+const { Router } = require("./src/router")
+const { uploadFile } = require("./src/routes/upload-file")
+const { getFile } = require("./src/routes/get-file")
+const { defaultHandler } = require("./src/routes/default-handler")
 
-const { PORT } = process.env;
+const { PORT } = process.env
 
-const router = Router().all(defaultHandler).get(getFile).post(uploadFile);
+const router = Router().all(defaultHandler).get(getFile).post(uploadFile)
 
-const server = createServer(router.serve);
+const server = createServer(router.serve)
 
-server.listen(PORT);
+server.listen(PORT)
 
-console.log(`Server running on port ${PORT}`);
+console.log(`Server running on port ${PORT}`)
