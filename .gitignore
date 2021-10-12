@@ -2,3 +2,5 @@ my.html
 выхлоп.html
 node_modules
 .DS_Store
+files/*
+!files/.gitkeep
